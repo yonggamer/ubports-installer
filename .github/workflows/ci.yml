@@ -1,7 +1,7 @@
 name: Continuous Integration
 
 on:
-  workflow_call:
+  workflow_dispatch:
 
 jobs:
   continuous-integration:
@@ -105,4 +105,11 @@ jobs:
                       .then(() => sha256sum(`./dist/${file}`))
                       .then(data =>
                         github.repos.uploadReleaseAsset({
-                          owner, repo, release_id, 
+                          owner, repo, release_id, data,
+                          name: `${file}.sha256`
+                        })
+                      )
+                      .then(() => console.log("uploaded checksum for", file))
+                  )
+                )
+              )
